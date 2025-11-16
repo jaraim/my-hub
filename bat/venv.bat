@@ -1,8 +1,8 @@
 @echo off
 chcp 65001 >nul
-title 虚拟环境配置
+title LemonAI 虚拟环境配置
 
-echo == 一键虚拟环境配置脚本 ==
+echo == LemonAI 一键虚拟环境配置脚本 ==
 echo.
 
 echo [1/4] 检测 virtualenv 是否安装...
@@ -72,5 +72,4 @@ echo   不要关闭此窗口
 echo +++++++++++++++++++++++++++++
 echo.
 REM 保持窗口打开，让用户可以直接使用虚拟环境
-
 cmd /k "echo 虚拟环境已激活 √ & where python & echo. & echo 现在可以直接运行 python 命令了！"
