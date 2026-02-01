@@ -6,7 +6,7 @@
 
 ![github统计](https://stats.justsong.cn/api/github?username=jaraim&amp;theme=dark&amp;lang=zh-CN)
 
-![Visitor Count](https://profile-counter.glitch.me/{jaraim}/count.svg)
+![统计访问次数](https://profile-counter.glitch.me/{jaraim}/count.svg)
 
 ![tip](https://badgen.net/badge/php/8.1/orange?icon=php)
 
