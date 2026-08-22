@@ -42,7 +42,7 @@
         },
         {
             "name": "好听轻音乐",
-            "url": "https://fusheng215.github.io/musicfree-plugins/js/%E5%A5%BD%E5%90%AC%E8%BD%BB%E9%9F%B3%E4%B9%90.js",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%A5%BD%E5%90%AC%E8%BD%BB%E9%9F%B3%E4%B9%90.js",
             "version": "0.1.2"
         }
     ]
