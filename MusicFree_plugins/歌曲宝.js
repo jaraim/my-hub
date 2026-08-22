@@ -180,30 +180,19 @@ const $f143b11fc67a70bd$var$pluginInstance = {
     getRecommendSheetsByTag: $f143b11fc67a70bd$var$getRecommendSheetsByTag,
     getMusicSheetInfo: $f143b11fc67a70bd$var$getMusicSheetInfo
 };
-(0, $19a45cbfdc5a1d1d$export$2e2bcd8739ae039)("明天会更好", 1, "music").then((res)=>{
-    console.log(res);
-    $f143b11fc67a70bd$var$getMediaSource(res.data[0], "standard").then((res)=>{
-        console.log(res);
-    });
-    $f143b11fc67a70bd$var$getLyric(res.data[0]).then((res)=>{
-        console.log(res);
-    });
-});
-var /*getRecommendSheetTags().then((res) => {
-    console.log(res)
-    getRecommendSheetsByTag(res.data[0].data[0], 1).then((res) => {
-        console.log(res)
-        getMusicSheetInfo(res.data[0], 1).then((res) => {
-            console.log(res);
-            getMediaSource(res.musicList[0], "standard").then((res) => {
-                console.log(res)
-            })
-            getLyric(res.musicList[0]).then((res) => {
-                console.log(res)
-            })
-        })
-    })
-})*/ $f143b11fc67a70bd$export$2e2bcd8739ae039 = $f143b11fc67a70bd$var$pluginInstance;
+var $f143b11fc67a70bd$export$2e2bcd8739ae039 = $f143b11fc67a70bd$var$pluginInstance;
 
+module.exports.platform = $f143b11fc67a70bd$var$pluginInstance.platform;
+module.exports.version = $f143b11fc67a70bd$var$pluginInstance.version;
+module.exports.author = $f143b11fc67a70bd$var$pluginInstance.author;
+module.exports.supportedSearchType = $f143b11fc67a70bd$var$pluginInstance.supportedSearchType;
+module.exports.srcUrl = $f143b11fc67a70bd$var$pluginInstance.srcUrl;
+module.exports.cacheControl = $f143b11fc67a70bd$var$pluginInstance.cacheControl;
+module.exports.search = $f143b11fc67a70bd$var$pluginInstance.search;
+module.exports.getMediaSource = $f143b11fc67a70bd$var$pluginInstance.getMediaSource;
+module.exports.getLyric = $f143b11fc67a70bd$var$pluginInstance.getLyric;
+module.exports.getRecommendSheetTags = $f143b11fc67a70bd$var$pluginInstance.getRecommendSheetTags;
+module.exports.getRecommendSheetsByTag = $f143b11fc67a70bd$var$pluginInstance.getRecommendSheetsByTag;
+module.exports.getMusicSheetInfo = $f143b11fc67a70bd$var$pluginInstance.getMusicSheetInfo;
 
 //# sourceMappingURL=gequbao.js.map
