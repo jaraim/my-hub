@@ -1,1 +1,39 @@
-{"plugins":[{"name":"小秋音乐","url":"https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E7%A7%8B%E9%9F%B3%E4%B9%90.js","version":"0.3.0"},{"name":"小蜗音乐","url":"https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E8%9C%97%E9%9F%B3%E4%B9%90.js","version":"0.3.0"},{"name":"小芸音乐","url":"https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E8%8A%B8%E9%9F%B3%E4%B9%90.js","version":"0.3.0"},{"name":"小枸音乐","url":"https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E6%9E%B8%E9%9F%B3%E4%B9%90.js","version":"0.3.0"},{"name":"小蜜音乐","url":"https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E8%9C%9C%E9%9F%B3%E4%B9%90.js","version":"0.3.0"},{"name":"小云音乐","url":"https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E4%BA%91%E9%9F%B3%E4%B9%90.js","version":"2.3.1"},{"name":"小水音乐","url":"https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E6%B0%B4%E9%9F%B3%E4%B9%90.js","version":"0.2.3"}]}
+{
+    "plugins": [
+        {
+            "name": "小秋音乐",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E7%A7%8B%E9%9F%B3%E4%B9%90.js",
+            "version": "0.3.0"
+        },
+        {
+            "name": "小蜗音乐",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E8%9C%97%E9%9F%B3%E4%B9%90.js",
+            "version": "0.3.0"
+        },
+        {
+            "name": "小芸音乐",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E8%8A%B8%E9%9F%B3%E4%B9%90.js",
+            "version": "0.3.0"
+        },
+        {
+            "name": "小枸音乐",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E6%9E%B8%E9%9F%B3%E4%B9%90.js",
+            "version": "0.3.0"
+        },
+        {
+            "name": "小蜜音乐",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E8%9C%9C%E9%9F%B3%E4%B9%90.js",
+            "version": "0.3.0"
+        },
+        {
+            "name": "小云音乐",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E4%BA%91%E9%9F%B3%E4%B9%90.js",
+            "version": "2.3.1"
+        },
+        {
+            "name": "小水音乐",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E6%B0%B4%E9%9F%B3%E4%B9%90.js",
+            "version": "0.2.3"
+        }
+    ]
+}
