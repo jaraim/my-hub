@@ -34,6 +34,11 @@
             "name": "小水音乐",
             "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E6%B0%B4%E9%9F%B3%E4%B9%90.js",
             "version": "0.2.3"
+        },
+        {
+            "name": "千千音乐",
+            "url": "https://fusheng215.github.io/musicfree-plugins/js/%E5%8D%83%E5%8D%83.js",
+            "version": "0.1.3"
         }
     ]
 }
