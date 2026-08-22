@@ -41,9 +41,14 @@
             "version": "0.1.3"
         },
         {
-            "name": "酷狗简云.js",
+            "name": "酷狗简云",
             "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E9%85%B7%E7%8B%97%E7%AE%80%E4%BA%91.js",
             "version": "0.6.2"
+        },
+        {
+            "name": "好听轻音乐",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%A5%BD%E5%90%AC%E8%BD%BB%E9%9F%B3%E4%B9%90.js",
+            "version": "0.1.2"
         },
         {
             "name": "书音FM",
@@ -51,9 +56,10 @@
             "version": "0.0.6"
         },
         {
-            "name": "好听轻音乐",
-            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%A5%BD%E5%90%AC%E8%BD%BB%E9%9F%B3%E4%B9%90.js",
-            "version": "0.1.2"
+            "name": "猫耳FM",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E7%8C%AB%E8%80%B3FM.js",
+            "version": "0.0.6"
         }
+        
     ]
 }
