@@ -164,9 +164,80 @@ async function $f143b11fc67a70bd$var$getMusicSheetInfo(sheetItem, page) {
     }
     return result;
 }
+async function $f143b11fc67a70bd$var$getTopLists(page) {
+    try {
+        var lists = [];
+        lists.push({
+            id: "/top/yesterday",
+            title: "昨日搜索",
+            updateTime: "每日更新"
+        });
+        lists.push({
+            id: "/top/week",
+            title: "本周搜索",
+            updateTime: "每周更新"
+        });
+        lists.push({
+            id: "/top/month",
+            title: "本月搜索",
+            updateTime: "每月更新"
+        });
+        lists.push({
+            id: "/top/last_month",
+            title: "上月搜索",
+            updateTime: "每月更新"
+        });
+        return {
+            isEnd: true,
+            data: lists
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            isEnd: true,
+            data: []
+        };
+    }
+}
+async function $f143b11fc67a70bd$var$getTopListDetail(topListItem, page) {
+    try {
+        var songs = [];
+        var topId = topListItem.id || "";
+        var searchUrl = $f143b11fc67a70bd$export$5e032988b71f6158 + topId;
+        if (topId.toString().startsWith("/top")) searchUrl = $f143b11fc67a70bd$export$5e032988b71f6158 + topId + "?page=" + page;
+        else searchUrl = $f143b11fc67a70bd$export$5e032988b71f6158 + topId + page;
+        let searchRes = (await (0, ($parcel$interopDefault($aeeUC$axios))).get(searchUrl, {
+            timeout: 5000
+        })).data;
+        const $ = $aeeUC$cheerio.load(searchRes);
+        var rowList = $("tbody").find("tr");
+        for(let i = 0; i < rowList.length; i++){
+            var keyword = $(rowList[i]).find("td a").attr("href");
+            if (!keyword) continue;
+            keyword = keyword.toString().trim().replace("/s/", "");
+            if (!keyword) continue;
+            try {
+                var sr = await (0, $19a45cbfdc5a1d1d$export$2e2bcd8739ae039)(keyword, 1, "music");
+                if (sr && sr.data && sr.data.length > 0) {
+                    songs.push(sr.data[0]);
+                }
+            } catch (e) {}
+        }
+        return {
+            isEnd: true,
+            data: songs
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            isEnd: true,
+            data: []
+        };
+    }
+}
 const $f143b11fc67a70bd$var$pluginInstance = {
     platform: "歌曲宝",
-    version: "0.0.6",
+    version: "0.0.7",
     author: "SoEasy同学",
     srcUrl: "https://gitee.com/kevinr/tvbox/raw/master/musicfree/plugins/gequbao.js",
     cacheControl: "no-cache",
@@ -178,7 +249,9 @@ const $f143b11fc67a70bd$var$pluginInstance = {
     getLyric: $f143b11fc67a70bd$var$getLyric,
     getRecommendSheetTags: $f143b11fc67a70bd$var$getRecommendSheetTags,
     getRecommendSheetsByTag: $f143b11fc67a70bd$var$getRecommendSheetsByTag,
-    getMusicSheetInfo: $f143b11fc67a70bd$var$getMusicSheetInfo
+    getMusicSheetInfo: $f143b11fc67a70bd$var$getMusicSheetInfo,
+    getTopLists: $f143b11fc67a70bd$var$getTopLists,
+    getTopListDetail: $f143b11fc67a70bd$var$getTopListDetail
 };
 var $f143b11fc67a70bd$export$2e2bcd8739ae039 = $f143b11fc67a70bd$var$pluginInstance;
 
@@ -194,5 +267,7 @@ module.exports.getLyric = $f143b11fc67a70bd$var$pluginInstance.getLyric;
 module.exports.getRecommendSheetTags = $f143b11fc67a70bd$var$pluginInstance.getRecommendSheetTags;
 module.exports.getRecommendSheetsByTag = $f143b11fc67a70bd$var$pluginInstance.getRecommendSheetsByTag;
 module.exports.getMusicSheetInfo = $f143b11fc67a70bd$var$pluginInstance.getMusicSheetInfo;
+module.exports.getTopLists = $f143b11fc67a70bd$var$pluginInstance.getTopLists;
+module.exports.getTopListDetail = $f143b11fc67a70bd$var$pluginInstance.getTopListDetail;
 
 //# sourceMappingURL=gequbao.js.map
