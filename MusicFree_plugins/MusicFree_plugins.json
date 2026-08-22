@@ -24,6 +24,11 @@
       "name": "小蜜音乐",
       "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E8%9C%9C%E9%9F%B3%E4%B9%90.js",
       "version": "0.3.0"
+    },
+    {
+      "name": "小云音乐",
+      "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%B0%8F%E4%BA%91%E9%9F%B3%E4%B9%90.js",
+      "version": "2.3.1"
     }
   ]
 }
