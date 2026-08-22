@@ -50,16 +50,20 @@
             "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E5%A5%BD%E5%90%AC%E8%BD%BB%E9%9F%B3%E4%B9%90.js",
             "version": "0.1.2"
         },
+         {
+            "name": "CCTV听音",
+            "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/CCTV%E5%90%AC%E9%9F%B3.js",
+            "version": "0.0.1"
+        },
         {
             "name": "书音FM",
             "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E4%B9%A6%E9%9F%B3FM.js",
-            "version": "0.0.6"
+            "version": "0.3.6"
         },
         {
             "name": "猫耳FM",
             "url": "https://raw.githubusercontent.com/jaraim/my-hub/refs/heads/main/MusicFree_plugins/%E7%8C%AB%E8%80%B3FM.js",
-            "version": "0.0.6"
-        }
-        
+            "version": "0.1.4"
+        }       
     ]
 }
