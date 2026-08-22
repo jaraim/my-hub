@@ -253,14 +253,116 @@ async function search(query, page, type) {
     };
 }
 
+// ==================== 首页热门歌单 ====================
+
+const recommendTags = [
+    { id: "热门", title: "热门" },
+    { id: "有声小说", title: "有声小说" },
+    { id: "相声评书", title: "相声评书" },
+    { id: "音乐", title: "音乐" },
+    { id: "儿童睡前故事", title: "儿童睡前故事" },
+    { id: "情感", title: "情感" },
+    { id: "历史", title: "历史" },
+    { id: "知识", title: "知识" },
+    { id: "人文", title: "人文" },
+];
+
+async function getRecommendSheetTags() {
+    return {
+        data: [
+            {
+                title: "热门分类",
+                data: recommendTags.map(tag => ({ id: tag.title, title: tag.title })),
+            },
+        ],
+        pinned: [{ id: "热门", title: "热门" }],
+    };
+}
+
+async function getRecommendSheetsByTag(tag, page) {
+    const keyword = (tag && tag.title) || "热门";
+    const res = await searchBase(keyword, page, "album");
+
+    if (res.ret !== 200 || !res.data?.result?.response) {
+        return { isEnd: true, data: [] };
+    }
+
+    const response = res.data.result.response;
+    const docs = response.docs || [];
+    const totalPage = response.totalPage || 1;
+
+    const albumList = docs.map(item => ({
+        id: item.id || item.albumId,
+        title: item.title,
+        artist: item.nickname || item.artist,
+        artwork: formatArtwork(item.cover_path || item.coverPath || item.cover),
+        description: item.intro || item.description,
+        isPaid: isAlbumPaid(item),
+        worksNum: item.tracks || 0,
+        date: item.updated_at ? dayjs(item.updated_at).format("YYYY-MM-DD") : null,
+    }));
+
+    return {
+        isEnd: page >= totalPage,
+        data: albumList,
+    };
+}
+
+async function getMusicSheetInfo(sheetItem, page) {
+    return getAlbumInfo(sheetItem, page);
+}
+
+// ==================== 首页排行榜 ====================
+
+const topLists = [
+    { id: "hot", title: "热门榜" },
+    { id: "new", title: "新品榜" },
+    { id: "good", title: "好评榜" },
+];
+
+async function getTopLists(page) {
+    return {
+        isEnd: true,
+        data: topLists,
+    };
+}
+
+async function getTopListDetail(topListItem, page) {
+    let keyword = "热门";
+    if (topListItem && topListItem.title === "新品榜") keyword = "新";
+    else if (topListItem && topListItem.title === "好评榜") keyword = "推荐";
+
+    const res = await searchBase(keyword, page, "track");
+
+    if (res.ret !== 200 || !res.data?.result?.response) {
+        return { isEnd: true, data: [] };
+    }
+
+    const response = res.data.result.response;
+    const docs = response.docs || [];
+    const totalPage = response.totalPage || 1;
+
+    const musicList = docs.map(item => formatMusicItem(item, item.nickname));
+
+    return {
+        isEnd: page >= totalPage,
+        data: musicList,
+    };
+}
+
 module.exports = {
     platform: "喜马拉雅(公开API)",
     author: '竹佀',
-    version: "0.6.2",
+    version: "0.7.0",
     supportedSearchType: ["music", "album"],
     srcUrl: "https://raw.gitcode.com/Crystim/mfp/raw/main/%E5%96%9C%E9%A9%AC%E6%8B%89%E9%9B%85_%E7%AB%B9%E4%BE%A3.js",
     cacheControl: "no-cache",
     search,
     getAlbumInfo,
     getMediaSource,
+    getRecommendSheetTags,
+    getRecommendSheetsByTag,
+    getMusicSheetInfo,
+    getTopLists,
+    getTopListDetail,
 };
