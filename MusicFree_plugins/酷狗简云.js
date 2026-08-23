@@ -15,7 +15,7 @@ const axios = require('axios');
 var CONFIG = {
     platform: "KuGou Lite",
     author: "简云",
-    version: "2.3.0",
+    version: "2.3.1",
     srcUrl: "https://gitee.com/csdjrw/music-free-plugin/raw/master/kugou.lite.js",
     primaryKey: ["id", "hash"],
     cacheControl: "no-store",
@@ -333,6 +333,75 @@ var ApiService = {
 };
 
 /**
+ * 酷我搜索兜底（vsaa 接口失效时使用）
+ */
+async function kuwoSearch(query, page) {
+    try {
+        const res = (await axios.get("https://search.kuwo.cn/r.s", {
+            params: {
+                rformat: "json",
+                encoding: "utf8",
+                ft: "music",
+                rn: 30,
+                pn: (page - 1) * 30,
+                all: query,
+                itemset: "web_2013",
+                client: "kt",
+                pcjson: 1
+            },
+            timeout: 10000
+        })).data;
+        const list = (res.abslist || []).map(function(_) {
+            return {
+                id: _.MUSICRID.split("_")[1].split("&")[0],
+                title: _.NAME,
+                artist: _.ARTIST,
+                album: _.ALBUM || "",
+                artwork: _.ARTISTPIC || ""
+            };
+        });
+        return { isEnd: true, data: list };
+    } catch (e) {
+        return { isEnd: true, data: [] };
+    }
+}
+async function getKuwoFallback(mediaItem, quality) {
+    try {
+        const sou = (await axios.get("https://search.kuwo.cn/r.s", {
+            params: { rformat: "json", encoding: "utf8", ft: "music", rn: 10, pn: 0, all: mediaItem.title || mediaItem.name || "", itemset: "web_2013", client: "kt", pcjson: 1 },
+            timeout: 10000
+        })).data.abslist;
+        let rid = null;
+        for (let _ of sou) {
+            if (_.MUSICRID) {
+                rid = _.MUSICRID.split("_")[1].split("&")[0];
+                break;
+            }
+        }
+        if (!rid) return {};
+        try {
+            const res = (await axios.get("https://music.haitangw.cc/music/kw.php", {
+                params: { level: "standard", id: rid },
+                timeout: 10000
+            })).data;
+            if (res && res.data && res.data.url && res.data.url.startsWith("http")) {
+                return { url: res.data.url, rawLrc: res.data.lrc };
+            }
+        } catch (e) {}
+        try {
+            const u = (await axios.get("https://antiserver.kuwo.cn/anti.s", {
+                params: { type: "convert_url", rid: "MUSIC_" + rid, format: "mp3", response: "url" },
+                timeout: 10000
+            })).data;
+            if (u && u.trim().startsWith("http")) {
+                return { url: u.trim() };
+            }
+        } catch (e) {}
+    } catch (e) {}
+    return {};
+}
+
+/**
  * 业务逻辑层
  */
 var Service = {
@@ -376,6 +445,9 @@ var Service = {
             return { isEnd: isEnd, data: items, total: data.total || items.length };
         }).catch(function(error) {
             console.error('搜索失败:', error);
+            if (type === 'music') {
+                return kuwoSearch(query, page);
+            }
             return { isEnd: true, data: [] };
         });
     },
@@ -413,7 +485,7 @@ var Service = {
             return {};
         }).catch(function(error) {
             console.error('获取音源失败:', error);
-            return {};
+            return getKuwoFallback(mediaItem, quality);
         });
     },
 
