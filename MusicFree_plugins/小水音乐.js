@@ -457,6 +457,51 @@ async function getMusicInfo(musicBase) {
  * @param {string} quality - 音质（如 "128k", "320k", "flac" 等）
  * @returns {Promise<Object>} 播放源信息
  */
+async function getKuwoFallback(musicItem, quality) {
+  try {
+    const sou = (await axios.default.get("https://search.kuwo.cn/r.s", {
+      params: {
+        rformat: "json",
+        encoding: "utf8",
+        ft: "music",
+        rn: 10,
+        pn: 0,
+        all: musicItem.title,
+        itemset: "web_2013",
+        client: "kt",
+        pcjson: 1,
+      },
+      timeout: 10000,
+    })).data.abslist;
+    let rid = null;
+    for (const _ of sou) {
+      if (_.MUSICRID) {
+        rid = _.MUSICRID.split("_")[1].split("&")[0];
+        break;
+      }
+    }
+    if (!rid) return null;
+    try {
+      const res = (await axios.default.get("https://music.haitangw.cc/music/kw.php", {
+        params: { level: "standard", id: rid },
+        timeout: 10000,
+      })).data;
+      if (res && res.data && res.data.url && res.data.url.startsWith("http")) {
+        return { url: res.data.url, rawLrc: res.data.lrc };
+      }
+    } catch (e) {}
+    try {
+      const u = (await axios.default.get("https://antiserver.kuwo.cn/anti.s", {
+        params: { type: "convert_url", rid: "MUSIC_" + rid, format: "mp3", response: "url" },
+        timeout: 10000,
+      })).data;
+      if (u && u.trim().startsWith("http")) {
+        return { url: u.trim() };
+      }
+    } catch (e) {}
+  } catch (e) {}
+  return null;
+}
 async function getMusicPlaybackSource(musicItem, quality = "128k") {
   if (!musicItem?.id) return null;
 
@@ -475,7 +520,7 @@ async function getMusicPlaybackSource(musicItem, quality = "128k") {
     });
 
     const song = response?.data?.data?.[0];
-    if (!song?.url) return null;
+    if (!song?.url) return await getKuwoFallback(musicItem, quality);
 
     // 2. 无需解密：直接返回
     if (!song.ekey) {
@@ -514,9 +559,7 @@ async function getMusicPlaybackSource(musicItem, quality = "128k") {
     };
   } catch (error) {
     console.error(`[汽水音乐] 获取播放源错误: ${error.message}`);
-    return {
-      url: ""
-    };
+    return await getKuwoFallback(musicItem, quality);
   }
 }
 
@@ -864,7 +907,7 @@ async function getMusicPlaylistInfo(playlist) {
 
 module.exports = {
   "platform": "汽水音乐",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "author": "Toskysun&简云",
   "appVersion": ">0.1.0-alpha.0",
   "srcUrl": "https://musicfree-plugins.netlify.app/plugins/qishui.js",
