@@ -440,6 +440,9 @@ const qualityLevels = {
     high: "320k",
     super: "320k",
 };
+function isValidUrl(url) {
+    return url && typeof url === "string" && url.startsWith("http") && !/[^\x00-\x7F]/.test(url);
+}
 async function getKuwoFallback(musicItem, quality) {
     try {
         const sou = (await axios_1.default.get("https://search.kuwo.cn/r.s", {
@@ -469,7 +472,7 @@ async function getKuwoFallback(musicItem, quality) {
                 params: { level: "standard", id: rid },
                 timeout: 10000,
             })).data;
-            if (res && res.data && res.data.url && res.data.url.startsWith("http")) {
+            if (isValidUrl(res && res.data && res.data.url)) {
                 return { url: res.data.url, rawLrc: res.data.lrc };
             }
         } catch (e) {}
@@ -478,7 +481,7 @@ async function getKuwoFallback(musicItem, quality) {
                 params: { type: "convert_url", rid: "MUSIC_" + rid, format: "mp3", response: "url" },
                 timeout: 10000,
             })).data;
-            if (u && u.trim().startsWith("http")) {
+            if (isValidUrl(u && u.trim())) {
                 return { url: u.trim() };
             }
         } catch (e) {}
@@ -496,7 +499,7 @@ async function getMediaSource(musicItem, quality) {
                 params: { level: htLevel, id: id },
                 timeout: 10000,
             })).data;
-            if (res && res.data && res.data.url && res.data.url.startsWith("http")) {
+            if (isValidUrl(res && res.data && res.data.url)) {
                 return { url: res.data.url, rawLrc: res.data.lrc };
             }
         } catch (e) {}
@@ -507,7 +510,7 @@ async function getMediaSource(musicItem, quality) {
             headers: { "X-Request-Key": "share-v3" },
             timeout: 10000,
         })).data;
-        if (res && res.url && res.url.startsWith("http")) {
+        if (isValidUrl(res && res.url)) {
             return { url: res.url };
         }
     } catch (e) {}
@@ -517,7 +520,7 @@ async function getMediaSource(musicItem, quality) {
 module.exports = {
     platform: "小秋音乐",
     author: "Huibq",
-    version: "0.3.2",
+    version: "0.3.3",
     srcUrl: "https://fastly.jsdelivr.net/gh/Huibq/keep-alive/Music_Free/xiaoqiu.js",
     cacheControl: "no-cache",
     hints: {
