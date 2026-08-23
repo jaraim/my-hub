@@ -442,7 +442,7 @@ const qualityLevels = {
 };
 async function getKuwoFallback(musicItem, quality) {
     try {
-        const sou = (await axios_1.default.get("http://search.kuwo.cn/r.s", {
+        const sou = (await axios_1.default.get("https://search.kuwo.cn/r.s", {
             params: {
                 rformat: "json",
                 encoding: "utf8",
@@ -464,13 +464,24 @@ async function getKuwoFallback(musicItem, quality) {
             }
         }
         if (!rid) return null;
-        const res = (await axios_1.default.get("https://music.haitangw.cc/music/kw.php", {
-            params: { level: "exhigh", id: rid },
-            timeout: 10000,
-        })).data;
-        if (res && res.data && res.data.url && res.data.url.startsWith("http")) {
-            return { url: res.data.url, rawLrc: res.data.lrc };
-        }
+        try {
+            const res = (await axios_1.default.get("https://music.haitangw.cc/music/kw.php", {
+                params: { level: "standard", id: rid },
+                timeout: 10000,
+            })).data;
+            if (res && res.data && res.data.url && res.data.url.startsWith("http")) {
+                return { url: res.data.url, rawLrc: res.data.lrc };
+            }
+        } catch (e) {}
+        try {
+            const u = (await axios_1.default.get("https://antiserver.kuwo.cn/anti.s", {
+                params: { type: "convert_url", rid: "MUSIC_" + rid, format: "mp3", response: "url" },
+                timeout: 10000,
+            })).data;
+            if (u && u.trim().startsWith("http")) {
+                return { url: u.trim() };
+            }
+        } catch (e) {}
     } catch (e) {}
     return null;
 }
@@ -506,7 +517,7 @@ async function getMediaSource(musicItem, quality) {
 module.exports = {
     platform: "小秋音乐",
     author: "Huibq",
-    version: "0.3.1",
+    version: "0.3.2",
     srcUrl: "https://fastly.jsdelivr.net/gh/Huibq/keep-alive/Music_Free/xiaoqiu.js",
     cacheControl: "no-cache",
     hints: {
