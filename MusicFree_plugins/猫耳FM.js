@@ -82,7 +82,7 @@ async function getAlbumInfo(albumItem) {
     };
 }
 async function getMediaSource(musicItem, quality) {
-    if (quality === "high" || quality === "super") {
+    if (!musicItem || !musicItem.id) {
         return;
     }
     const res = (await axios_1.default.get("https://www.missevan.com/sound/getsound", {
@@ -178,7 +178,7 @@ async function getMusicSheetInfo(sheet, page) {
 module.exports = {
     platform: "猫耳FM",
     author: '猫头猫',
-    version: "0.1.4",
+    version: "0.1.5",
     appVersion: ">0.1.0-alpha.0",
     srcUrl: "https://gitee.com/maotoumao/MusicFreePlugins/raw/v0.1/dist/maoerfm/index.js",
     cacheControl: "no-cache",
