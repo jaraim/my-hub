@@ -203,16 +203,57 @@ async function $db56cb91f4576ed0$export$2e2bcd8739ae039(query, page, type) {
     };
 }
 /** 获取专辑详情 */ async function $89bf7938ddf8e249$var$getMediaSource(musicItem, quality) {
-    let html = await (0, $60fd231faf899fd5$export$bd6d310eff940ae4)("https://zz123.com/ajax/", {
-        act: "songinfo",
-        id: musicItem.id,
-        lang: ""
-    });
-    const data = html.data.data;
-    return {
-        url: data.mp3,
-        quality: quality
-    };
+    try {
+        let html = await (0, $60fd231faf899fd5$export$bd6d310eff940ae4)("https://zz123.com/ajax/", {
+            act: "songinfo",
+            id: musicItem.id,
+            lang: ""
+        });
+        const data = html.data.data;
+        if (data && data.mp3 && data.mp3.startsWith("http") && !data.mp3.includes("jsbaidu.com")) {
+            return {
+                url: data.mp3,
+                quality: quality
+            };
+        }
+    } catch (e) {}
+    return await getKuwoFallback(musicItem, quality);
+}
+async function getKuwoFallback(musicItem, quality) {
+    try {
+        const $axios = (0, ($parcel$interopDefault($d9Bti$axios)));
+        const sou = (await $axios.get("https://search.kuwo.cn/r.s", {
+            params: { rformat: "json", encoding: "utf8", ft: "music", rn: 10, pn: 0, all: musicItem.title, itemset: "web_2013", client: "kt", pcjson: 1 },
+            timeout: 10000
+        })).data.abslist;
+        let rid = null;
+        for (let _ of sou) {
+            if (_.MUSICRID) {
+                rid = _.MUSICRID.split("_")[1].split("&")[0];
+                break;
+            }
+        }
+        if (!rid) return null;
+        try {
+            const res = (await $axios.get("https://music.haitangw.cc/music/kw.php", {
+                params: { level: "standard", id: rid },
+                timeout: 10000
+            })).data;
+            if (res && res.data && res.data.url && res.data.url.startsWith("http")) {
+                return { url: res.data.url, rawLrc: res.data.lrc };
+            }
+        } catch (e) {}
+        try {
+            const u = (await $axios.get("https://antiserver.kuwo.cn/anti.s", {
+                params: { type: "convert_url", rid: "MUSIC_" + rid, format: "mp3", response: "url" },
+                timeout: 10000
+            })).data;
+            if (u && u.trim().startsWith("http")) {
+                return { url: u.trim() };
+            }
+        } catch (e) {}
+    } catch (e) {}
+    return null;
 }
 async function $89bf7938ddf8e249$var$getTopLists() {
     var result = [];
@@ -318,7 +359,7 @@ async function $89bf7938ddf8e249$var$getMusicSheetInfo(sheetItem, page) {
 }
 const $89bf7938ddf8e249$var$pluginInstance = {
     platform: "种子",
-    version: "0.1.0",
+    version: "0.1.1",
     author: "SoEasy同学",
     srcUrl: "https://gitee.com/kevinr/tvbox/raw/master/musicfree/plugins/zz.js",
     supportedSearchType: [
