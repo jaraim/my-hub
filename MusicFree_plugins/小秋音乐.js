@@ -440,22 +440,73 @@ const qualityLevels = {
     high: "320k",
     super: "320k",
 };
-async function getMediaSource(musicItem, quality) {
-    const res = (
-        await axios_1.default.get(`https://lxmusicapi.onrender.com/url/tx/${musicItem.songmid}/${qualityLevels[quality]}`, {
-            headers: {
-                "X-Request-Key": "share-v3"
+async function getKuwoFallback(musicItem, quality) {
+    try {
+        const sou = (await axios_1.default.get("http://search.kuwo.cn/r.s", {
+            params: {
+                rformat: "json",
+                encoding: "utf8",
+                ft: "music",
+                rn: 10,
+                pn: 0,
+                all: musicItem.title,
+                itemset: "web_2013",
+                client: "kt",
+                pcjson: 1,
             },
-        })
-    ).data;
-    return {
-        url: res.url,
-    };
+            timeout: 10000,
+        })).data.abslist;
+        let rid = null;
+        for (let _ of sou) {
+            if (_.MUSICRID) {
+                rid = _.MUSICRID.split("_")[1].split("&")[0];
+                break;
+            }
+        }
+        if (!rid) return null;
+        const res = (await axios_1.default.get("https://music.haitangw.cc/music/kw.php", {
+            params: { level: "exhigh", id: rid },
+            timeout: 10000,
+        })).data;
+        if (res && res.data && res.data.url && res.data.url.startsWith("http")) {
+            return { url: res.data.url, rawLrc: res.data.lrc };
+        }
+    } catch (e) {}
+    return null;
+}
+async function getMediaSource(musicItem, quality) {
+    const q = qualityLevels[quality] || "320k";
+    const htLevelMap = { low: "standard", standard: "exhigh", high: "lossless", super: "hires" };
+    const id = musicItem.songmid || musicItem.id;
+    // 1. 元力菌 haitangw 腾讯直连
+    for (const htLevel of [htLevelMap[quality] || "exhigh", "standard"]) {
+        try {
+            const res = (await axios_1.default.get("https://music.haitangw.cc/music/qq.php", {
+                params: { level: htLevel, id: id },
+                timeout: 10000,
+            })).data;
+            if (res && res.data && res.data.url && res.data.url.startsWith("http")) {
+                return { url: res.data.url, rawLrc: res.data.lrc };
+            }
+        } catch (e) {}
+    }
+    // 2. 保留 onrender 尝试
+    try {
+        const res = (await axios_1.default.get(`https://lxmusicapi.onrender.com/url/tx/${id}/${q}`, {
+            headers: { "X-Request-Key": "share-v3" },
+            timeout: 10000,
+        })).data;
+        if (res && res.url && res.url.startsWith("http")) {
+            return { url: res.url };
+        }
+    } catch (e) {}
+    // 3. 酷我兜底
+    return await getKuwoFallback(musicItem, quality);
 }
 module.exports = {
     platform: "小秋音乐",
     author: "Huibq",
-    version: "0.3.0",
+    version: "0.3.1",
     srcUrl: "https://fastly.jsdelivr.net/gh/Huibq/keep-alive/Music_Free/xiaoqiu.js",
     cacheControl: "no-cache",
     hints: {
